@@ -16,10 +16,17 @@ vvsay --list-presets   # (default) の付いたプリセットのキャラクタ
 
 ### Claude Codeへの追加
 
-`~/.claude/skills/`ディレクトリにコピー：
+[GitHub CLI](https://cli.github.com/)の`gh skill`でインストールします（`~/.claude/skills/vv-reporter/`に入ります）：
 ```bash
-rsync -av --exclude='.git' --exclude='.DS_Store' . ~/.claude/skills/vv-reporter/
+gh skill install petamorikei/vv-reporter vv-reporter --agent claude-code --scope user
 ```
+
+更新：
+```bash
+gh skill update --all
+```
+
+`gh skill`はインストール時にファイルの実行権限を保持しないため、`SKILL.md`はスクリプトを`bash`経由で実行します。
 
 ## 使い方
 
@@ -36,31 +43,34 @@ vvsay --bg --queue "テストが完了したのだ"
 
 ## キャラクターと口調
 
-`characters/` に口調ファイルがあるキャラクター：
+`skills/vv-reporter/characters/` に口調ファイルがあるキャラクター：
 
 ずんだもん、四国めたん、春日部つむぎ、雨晴はう、波音リツ、冥鳴ひまり、九州そら、玄野武宏、白上虎太郎、青山龍星、もち子さん
 
-それ以外のキャラクターは汎用の丁寧な口調（`characters/_generic.md`）で報告します。
+それ以外のキャラクターは汎用の丁寧な口調（`skills/vv-reporter/characters/_generic.md`）で報告します。
 
 口調ファイルは、[VOICEVOX 公式のキャラクター紹介](https://voicevox.hiroshiba.jp/dormitory/)と[キャラクターの呼称表](https://voicevox.hiroshiba.jp/dormitory/call_names/)を根拠にしています。
 公式に語尾の指定がないキャラクターは、公式の人物像に合わせて報告用の口調を決めており、各ファイルにその旨を記載しています。
 
 ### キャラクターを追加する
 
-`characters/<vvsay --list-narrator に表示される名前>.md` を作成します。既存のファイルと同じく、公式設定（出典付き）・報告での口調・例を書いてください。
+`skills/vv-reporter/characters/<vvsay --list-narrator に表示される名前>.md` を作成します。既存のファイルと同じく、公式設定（出典付き）・報告での口調・例を書いてください。
 
 ## ファイル構成
 
 ```
 vv-reporter/
-├── SKILL.md                  # スキル定義（読み込み時に現在のキャラクターの口調を埋め込む）
-├── README.md                 # このファイル
-├── LICENSE                   # MITライセンス
-├── scripts/voice-profile.sh  # vvsay の設定からキャラクターを調べ、口調ファイルを出力
-└── characters/               # キャラクターごとの口調ファイル
-    ├── _generic.md           # 専用ファイルがないときの汎用口調
-    └── ずんだもん.md など
+├── README.md                     # このファイル
+├── LICENSE                       # MITライセンス
+└── skills/vv-reporter/           # gh skillがインストールするスキル本体
+    ├── SKILL.md                  # スキル定義（読み込み時に現在のキャラクターの口調を埋め込む）
+    ├── scripts/voice-profile.sh  # vvsayの設定からキャラクターを調べ、口調ファイルを出力
+    └── characters/               # キャラクターごとの口調ファイル
+        ├── _generic.md           # 専用ファイルがないときの汎用口調
+        └── ずんだもん.md など
 ```
+
+`gh skill`がインストールするのは`skills/vv-reporter/`の中身だけです。
 
 ## ライセンス
 
